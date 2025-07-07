@@ -1,13 +1,11 @@
-  """
+"""
 Hi! This is a simple, multiple variable linear regression code for predicting values with multiple features.
 
 Class Features:
     - Feature Scaling with Z-Score scaling.
     - Model Training with Gradient Descent
     - Model Generation with the found coefficients w and b (Found by Gradient Descent).
-    - Checking for convergence with epsilon value.
-    - Checking if cost ever increases, and if it detects an Exception is raised.
-    
+    - Checking for convergence with epsilon value and gradient value.
 """
 
 import numpy as np
@@ -85,35 +83,13 @@ class LinearRegression:
         return gradient_w, gradient_b
     
     
-    def convergence_check(self, w, b, history):
-        if len(history) < 2:
-            return False
-        
-        w_, b_ = history[-2]
-        if abs(max(w_ - w)) < self.epsilon and abs(b_ - b) < self.epsilon:
-            return True
-        return False
-    
-    
-    def cost_check(self, history):
-        if len(history) < 2:
-            return True
-        return history[-1] <= history[-2]
-                
-    
-    
-    def gradient_descent(self, max_iterations, alpha):        
-        coefficient_history = []
-        cost_history = []
+    def gradient_descent(self, max_iterations, alpha):
         w = self.w_init
         b = self.b_init
                         
         for i in range(max_iterations):
             gradient_w, gradient_b = self.compute_gradient(w, b)
             cost = self.compute_cost(w, b)
-            
-            coefficient_history.append((w, b))
-            cost_history.append(cost)
             
             w = w - alpha * gradient_w
             b = b - alpha * gradient_b
@@ -125,12 +101,10 @@ class LinearRegression:
                 print(f"#{i} - cost: {cost}, w: {w}, b: {b}")
             
             # If w or b stops incrementing or increments as smaller than epsilon, then return because our gradient descent converged. 
-            if self.convergence_check(w, b, coefficient_history):
+            if abs(max(gradient_w)) < self.epsilon and abs(gradient_b) < self.epsilon:
                 return w, b
-            
-            if not self.cost_check(cost_history):
-                raise Exception("Cost increased because alpha value is large. Adjust the alpha value.")
         return w, b
+    
     
     def get_model(self):
         return self.model_generate(self.w, self.b)
@@ -148,12 +122,11 @@ linear_reg = LinearRegression(x_train, y_train, max_iterations=10000) # Gradient
 
 print(linear_reg) # This will run __str__() method.
 
-F = linear_reg.get_model()
-
-
-y_predictions = np.array([F(i) for i in linear_reg.zscore_normalization(x_train)]) # This line creates a numpy array with all prediction values.
+F = linear_reg.get_model() # This is our model with trained coefficients.
 
 # Plotting actual values VS predicted values.
+
+y_predictions = np.array([F(i) for i in linear_reg.zscore_normalization(x_train)]) # This line creates a numpy array with all prediction values.
 
 plt.scatter(range(len(y_train)), y_train, color='b', label='Actual')
 plt.scatter(range(len(y_predictions)), y_predictions, color='r', marker='x', label='Predicted')
