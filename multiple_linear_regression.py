@@ -11,6 +11,7 @@ Class Features:
 import numpy as np
 import matplotlib.pyplot as plt
 from math import ceil
+import copy
 
 class LinearRegression:
     def __init__(self, x_train, y_train, max_iterations=10000, alpha=0.01, epsilon=1.0e-10, w_init=None, b_init=100):
@@ -84,7 +85,7 @@ class LinearRegression:
     
     
     def gradient_descent(self, max_iterations, alpha):
-        w = self.w_init
+        w = copy.deepcopy(self.w_init)
         b = self.b_init
                         
         for i in range(max_iterations):
