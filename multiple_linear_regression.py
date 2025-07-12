@@ -109,6 +109,20 @@ class LinearRegression:
     def get_model(self):
         return self.model_generate(self.w, self.b)
 
+
+    def plot_model(self):
+        model = self.get_model()
+        y_predictions = np.array([model(i) for i in linear_reg.zscore_normalization(x_train)]) # This line creates a numpy array with all prediction values.
+
+        plt.scatter(range(len(self.y_train)), self.y_train, color='b', label='Actual')
+        plt.scatter(range(len(y_predictions)), y_predictions, color='r', marker='x', label='Predicted')
+
+        plt.title("Actual vs Predicted values")
+        plt.xlabel("Sample Index")
+        plt.ylabel("Value")
+        plt.legend()
+        plt.grid(True)
+        plt.show()
     
     def __str__(self):
         return f"Linear Regression model found by Gradient Descent is:\nF(x) = {self.w} . X + {self.b}\nIterations Completed : {self.iterations}"
@@ -123,17 +137,18 @@ linear_reg = LinearRegression(x_train, y_train, max_iterations=10000) # Gradient
 print(linear_reg) # This will run __str__() method.
 
 F = linear_reg.get_model() # This is our model with trained coefficients.
+# You can use this model to predict.
+x_test = linear_reg.x_train[0] 
 
-# Plotting actual values VS predicted values.
+# !!! Notice that I am not using x_train[0] directly. 
+# This is because the class variable x_train is a scaled version of the actual x_train.
+# This was a note that remarks you should only predict with scaled features!
 
-y_predictions = np.array([F(i) for i in linear_reg.zscore_normalization(x_train)]) # This line creates a numpy array with all prediction values.
+prediction = F(x_test) # Prediction Example
+real = y_train[0]
 
-plt.scatter(range(len(y_train)), y_train, color='b', label='Actual')
-plt.scatter(range(len(y_predictions)), y_predictions, color='r', marker='x', label='Predicted')
+print(f"Real value: {real} --- Prediction: {prediction}")
 
-plt.title("Actual vs Predicted values")
-plt.xlabel("Sample Index")
-plt.ylabel("Value")
-plt.legend()
-plt.grid(True)
-plt.show()
+# Plotting all actual values VS predicted values.
+
+linear_reg.plot_model()
