@@ -52,7 +52,7 @@ class LinearRegression:
     
     
     def compute_cost(self, w, b):
-        m = len(self.x_train)
+        m = self.x_train.shape[0]
         model = self.model_generate(w, b)
         # Calculates the cost - how well our model fits to the actual data - (lower == better)
         cost = 0
@@ -64,8 +64,7 @@ class LinearRegression:
     
     
     def compute_gradient(self, w, b):
-        m = len(self.x_train)
-        n = len(self.x_train[0])
+        m, n = self.x_train.shape
         
         gradient_w = np.zeros((n,))
         gradient_b = 0
