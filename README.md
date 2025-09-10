@@ -4,7 +4,7 @@
 My Machine Learning algorithm implementations that I implemented throughout the [Machine Learning Speacialization](https://www.coursera.org/specializations/machine-learning-introduction) course and throughout my machine learning journey. These implementations are not efficient as Tensorflow, Pytorch or Keras implementations but they provide a strong intuition of how these algorithms internally work.
 
 ## Implementation Status:
-✅: Implemented.
+✅: Implemented
 ❌: Not implemented yet, but will implement.
 
 | Supervised Learning                  | Unsupervised Learning             |
